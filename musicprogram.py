@@ -12,10 +12,10 @@ class MusicProgram(Program):
     def __init__(self, ui):
         super(MusicProgram, self).__init__(ui)
 
-        self.midi = mido.open_output('FLUID Ssynth (966):Synth input port (966:0) 128:0')
+        self.midi = mido.open_output('FLUID Synth (966):Synth input port (966:0) 128:0')
 
         for i in range(0,4):
-            self.midi.send(mido.Message('program_change', program=self.instruments[i], channel=i, velocity=127))
+            self.midi.send(mido.Message('program_change', program=self.instruments[i], channel=i))
 
     def get_note(self, r, c):
         notes = (60, 62, 64 , 65, 67, 69)
@@ -34,7 +34,7 @@ class MusicProgram(Program):
 
     def button_event(self, number, state):
         row = self.ui.button_rows[number]
-        column = self.ui.button_columes[number]
+        column = self.ui.button_columns[number]
 
         (note, channel) = self.get_note(row, column)
 
