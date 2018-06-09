@@ -59,6 +59,6 @@ class GameProgram(MusicProgram):
     def button_event(self, number, state):
         if (state):
             elap = time.time() - self.button_jump_time[number]
-            if (elap < self.hide_delay*2):
+            if (elap < self.hide_delay*4):
                 self.hide()
                 PlaySong(self.ui).play_song(0)

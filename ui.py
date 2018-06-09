@@ -10,11 +10,19 @@ from smbpi.ioexpand import MCP23017
 
 from musicprogram import MusicProgram
 from gameprogram import GameProgram
-from all_notes_off import all_notes_off
+from midistuff import all_notes_off
 
 DEBOUNCE_TIME=0.01
+LONG_THRESH=2
 
 class LeiaUI(object):
+    button_music = 4
+    button_game = 10
+    button_spell = 16
+    button_shift = 21
+    button_animals = 22
+    button_off = 27
+
     button_rows = (   1, 2, 3, 4,
                    0, 1, 2, 3, 4, 5,
                    0, 1, 2, 3, 4, 5,
@@ -22,12 +30,12 @@ class LeiaUI(object):
                    0, 1, 2, 3, 4, 5,
                       1, 2, 3, 4)
 
-    button_columns = (0, 0, 0, 0,
+    button_columns = (   0, 0, 0, 0,
                       1, 1, 1, 1, 1, 1,
                       2, 2, 2, 2, 2, 2,
                       3, 3, 3, 3, 3, 3,
                       4, 4, 4, 4, 4, 4,
-                      5, 5, 5, 5)
+                         5, 5, 5, 5)
 
     def __init__(self, bus):
         self.led_controllers = [TLC59116(bus, 0x60), TLC59116(bus, 0x61)]
@@ -39,11 +47,15 @@ class LeiaUI(object):
         self.brights=[]
         self.button_last_state = []
         self.button_last_time = []
+        self.button_down_time = []
+        self.button_long_event_sent = []
         for i in range(0, self.num_buttons):
             self.brights.append(-1)
             self.set_button_bright(i, 0)
             self.button_last_state.append(False)
             self.button_last_time.append(0)
+            self.button_down_time.append(0)
+            self.button_long_event_sent.append(False)
 
         for led_controller in self.led_controllers:
             led_controller.set_oscillator(True)
@@ -53,7 +65,7 @@ class LeiaUI(object):
                 button_controller.set_pullup(i, 0xFF)
 
         self.program = None
-        self.set_program(1)
+        self.set_program(0)
 
     def set_program(self, number):
         if (number == 0):
@@ -115,6 +127,13 @@ class LeiaUI(object):
         if self.program:
             self.program.button_event(number, state)
 
+    def button_long_event(self, number):
+        if self.button_last_state[self.button_shift]:
+            if (number==self.button_music):
+                self.set_program(0)
+            elif (number==self.button_game):
+                self.set_program(1)
+
     def process_buttons(self):
         self.cache_inputs()
         for i in range(0, self.num_buttons):
@@ -125,6 +144,16 @@ class LeiaUI(object):
                     self.button_event(i, state)
                     self.button_last_time[i] = tNow
                     self.button_last_state[i] = state
+
+            if state:
+                if (not self.button_down_time[i]):
+                    self.button_down_time[i] = time.time()
+                elif (not self.button_long_event_sent[i]) and (time.time()-self.button_down_time[i] > LONG_THRESH):
+                    self.button_long_event(i)
+                    self.button_long_event_sent[i] = True
+            else:
+                self.button_down_time[i] = None
+                self.button_long_event_sent[i] = False
 
     def run_ui(self):
         try:

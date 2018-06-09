@@ -1,6 +1,7 @@
 import mido
 from midipercuss import HIGHTOM1, MUTHIGHCONGA, LOWCONGA, HIGHTIMBALE, SNAREDRUM1, LOWTOM2, MIDTOM1, CLAVES
 from program import Program
+from midistuff import connect_midi
 
 class MusicProgram(Program):
     instruments = (14,
@@ -12,7 +13,7 @@ class MusicProgram(Program):
     def __init__(self, ui):
         super(MusicProgram, self).__init__(ui)
 
-        self.midi = mido.open_output('FLUID Synth (966):Synth input port (966:0) 128:0')
+        self.midi = connect_midi() # mido.open_output('FLUID Synth (966):Synth input port (966:0) 128:0')
 
         for i in range(0,4):
             self.midi.send(mido.Message('program_change', program=self.instruments[i], channel=i))
