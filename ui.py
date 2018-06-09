@@ -31,6 +31,8 @@ class LeiaUI(object):
             # Nothing to do
             return
 
+        #print "set", number, brightness
+
         chip = number / 16
         i = number % 16
         if brightness == 100:
@@ -51,6 +53,9 @@ class LeiaUI(object):
         i = chip_offset % 8
 
         v = chip.get_gpio(bank)
+
+        #print number, chip_number, chip, chip_offset, bank, i, v
+
         bit = (1 << i)
         return (v & bit) == 0
 
@@ -58,14 +63,16 @@ class LeiaUI(object):
         lit = 0
         last_time = time.time()
         while True:
-            if (time.time()-last_time) > 0.1:
-                for i in range(0, self.num_buttons):
-                    if (i==lit):
-                        self.set_button_bright(i, 100)
-                    else:
-                        self.set_button_bright(i, 0)
-                    lit = (lit + 1) % self.num_buttons
-                    last_time = time.time()
+            for i in range(0, self.num_buttons):
+                if (i==lit) or (self.get_button_state(i)):
+                    self.set_button_bright(i, 100)
+                else:
+                    self.set_button_bright(i, 0)
+
+            if (time.time() - last_time) > 0.1:
+                lit = (lit + 1) % self.num_buttons
+                last_time = time.time()
+
             time.sleep(0.01)
 
 
