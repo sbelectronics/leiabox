@@ -100,5 +100,8 @@ play notes from python
 sudo apt-get install -y libjack-dev
 sudo pip install mido python-rtmidi
 python
-
+    import mido
+    mido.get_output_names()
+    o=mido.open_output('FLUID Synth (966):Synth input port (966:0) 128:0') 
+    o.send(mido.Message('note_on', note=30, velocity=127)) 
 ```
