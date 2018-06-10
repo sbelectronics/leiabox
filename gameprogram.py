@@ -52,13 +52,13 @@ class GameProgram(MusicProgram):
 
         self.last_jump_time = time.time()
 
-        self.hide_delay = 0.2
+        self.hide_delay = 0.4
 
         self.button_jump_time[self.last_button] = time.time()
 
     def button_event(self, number, state):
         if (state):
             elap = time.time() - self.button_jump_time[number]
-            if (elap < self.hide_delay*4):
+            if (elap < self.hide_delay*2):
                 self.hide()
-                PlaySong(self.ui).play_song(0)
+                PlaySong(self.ui).play_song(number)

@@ -3,12 +3,21 @@ import random
 import subprocess
 
 class PlaySong(object):
-    songs = ["mpg123 -k 1755 -n 700 mp3/Queen-AnotherOneBitesTheDust.mp3"]
+    songs = ["mpg123 -k 1755 -n 700 mp3/Queen-AnotherOneBitesTheDust.mp3",
+             "mpg123 -k 870 -n 800 mp3/blondie-onewayoranother.mp3",
+             "mpg123 -k 1170 -n 550 mp3/patbenatar-hitmewithyourbestshot.mp3",
+             "mpg123 -k 6150 -n 650 mp3/gapband*.mp3",
+             "mpg123 -k 2870 -n 700 mp3/quietriot-bangyourhead.mp3",
+             "mpg123 -k 850 -n 560 mp3/joanjett-cherrybomb.mp3",
+             "mpg123 -k 900 -n 520 mp3/toddlundgren-bangthedrumallday.mp3",
+             "mpg123 -k 3800 -n 620 mp3/gogos-wegotthebeat.mp3"]
 
     def __init__(self, ui):
         self.ui = ui
 
     def play_song(self, index):
+        index = index % len(self.songs)
+
         song_cmd = self.songs[index]
 
         p = subprocess.Popen(song_cmd, shell=True)
