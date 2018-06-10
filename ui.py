@@ -10,7 +10,7 @@ from smbpi.ioexpand import MCP23017
 
 from musicprogram import MusicProgram
 from gameprogram import GameProgram
-from midistuff import all_notes_off
+from midistuff import all_notes_off, set_volume
 
 DEBOUNCE_TIME=0.01
 LONG_THRESH=2
@@ -22,6 +22,15 @@ class LeiaUI(object):
     button_shift = 21
     button_animals = 22
     button_off = 27
+
+    button_v0 = 0
+    button_v1 = 5
+    button_v2 = 11
+    button_v3 = 17
+    button_v4 = 23
+    button_v5 = 28
+
+    volumes = (50,60,70,80,90,100)
 
     button_rows = (   1, 2, 3, 4,
                    0, 1, 2, 3, 4, 5,
@@ -133,6 +142,18 @@ class LeiaUI(object):
                 self.set_program(0)
             elif (number==self.button_game):
                 self.set_program(1)
+            elif (number==self.button_v0):
+                set_volume(self.volumes[0])
+            elif (number==self.button_v1):
+                set_volume(self.volumes[1])
+            elif (number==self.button_v2):
+                set_volume(self.volumes[2])
+            elif (number==self.button_v3):
+                set_volume(self.volumes[3])
+            elif (number==self.button_v4):
+                set_volume(self.volumes[4])
+            elif (number==self.button_v5):
+                set_volume(self.volumes[5])
 
     def process_buttons(self):
         self.cache_inputs()

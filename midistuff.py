@@ -1,3 +1,4 @@
+import os
 import mido
 
 def connect_midi():
@@ -12,5 +13,5 @@ def all_notes_off():
     for i in range(0, 16):
         midi.send(mido.Message('control_change', control=123, value=0, channel=i))
 
-
-
+def set_volume(amount):
+    os.system("amixer sset PCM %d%%" % amount)
