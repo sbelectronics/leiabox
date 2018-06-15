@@ -10,7 +10,7 @@ from smbpi.ioexpand import MCP23017
 
 from musicprogram import MusicProgram
 from gameprogram import GameProgram
-from midistuff import all_notes_off, set_volume
+from midistuff import all_notes_off, midi_set_volume
 
 DEBOUNCE_TIME=0.01
 LONG_THRESH=2
@@ -74,13 +74,18 @@ class LeiaUI(object):
                 button_controller.set_pullup(i, 0xFF)
 
         self.program = None
+        self.program_number = -1
+        self.volume = 0
         self.set_program(0)
+        self.set_volume(preset=4)
 
     def set_program(self, number):
         if (number == 0):
             self.program = MusicProgram(self)
         elif (number == 1):
             self.program = GameProgram(self)
+
+        self.program_number = number
 
     def set_button_bright(self, number, brightness):
         if brightness == self.brights[number]:
@@ -136,6 +141,14 @@ class LeiaUI(object):
         if self.program:
             self.program.button_event(number, state)
 
+    def set_volume(self, v=None, preset=None):
+        if preset:
+            midi_set_volume(self.volumes[preset])
+            self.volume = self.volumes[preset]
+        else:
+            midi_set_volume(v)
+            self.volume = v
+
     def button_long_event(self, number):
         if self.button_last_state[self.button_shift]:
             if (number==self.button_music):
@@ -143,17 +156,17 @@ class LeiaUI(object):
             elif (number==self.button_game):
                 self.set_program(1)
             elif (number==self.button_v0):
-                set_volume(self.volumes[0])
+                self.set_volume(preset=0)
             elif (number==self.button_v1):
-                set_volume(self.volumes[1])
+                self.set_volume(preset=1)
             elif (number==self.button_v2):
-                set_volume(self.volumes[2])
+                self.set_volume(preset=2)
             elif (number==self.button_v3):
-                set_volume(self.volumes[3])
+                self.set_volume(preset=3)
             elif (number==self.button_v4):
-                set_volume(self.volumes[4])
+                self.set_volume(preset=4)
             elif (number==self.button_v5):
-                set_volume(self.volumes[5])
+                self.set_volume(preset=5)
 
     def process_buttons(self):
         self.cache_inputs()
