@@ -10,7 +10,7 @@ from smbpi.ioexpand import MCP23017
 
 from musicprogram import MusicProgram
 from gameprogram import GameProgram
-from midistuff import all_notes_off, set_volume as midi_set_volume
+from midistuff import all_notes_off as midi_all_notes_off, set_volume as midi_set_volume
 
 DEBOUNCE_TIME=0.01
 LONG_THRESH=2
@@ -141,6 +141,9 @@ class LeiaUI(object):
         if self.program:
             self.program.button_event(number, state)
 
+    def all_notes_off(self):
+        midi_all_notes_off()
+
     def set_volume(self, v=None, preset=None):
         if preset:
             midi_set_volume(self.volumes[preset])
@@ -189,15 +192,18 @@ class LeiaUI(object):
                 self.button_down_time[i] = None
                 self.button_long_event_sent[i] = False
 
+    def run_ui_once(self):
+        self.process_buttons()
+        if self.program:
+            self.program.idle()
+
     def run_ui(self):
         try:
             while True:
-                self.process_buttons()
-                if self.program:
-                    self.program.idle()
+                self.run_ui_once()
                 time.sleep(0.01)
         finally:
-            all_notes_off()
+            self.all_notes_off()
 
     def run_test(self):
         lit = 0

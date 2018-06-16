@@ -7,6 +7,7 @@
 import argparse
 import smbus
 import threading
+import time
 from ui import LeiaUI
 
 glo_leiabox = None
@@ -16,9 +17,25 @@ class LeiaUIThread(threading.Thread):
         super(LeiaUIThread, self).__init__()
         self.ui = LeiaUI(bus)
         self.daemon = True
+        self.lock = threading.Lock()
+
+    def run_lock_acquire(self):
+        self.lock.acquire()
+
+    def run_lock_release(self):
+        self.lock.release()
 
     def run(self):
-        self.ui.run_ui()
+        try:
+            while True:
+                self.run_lock_acquire()
+                try:
+                    self.ui.run_ui_once()
+                finally:
+                    self.run_lock_release()
+                time.sleep(0.01)
+        finally:
+            self.ui.all_notes_off()
 
     def set_program(self, number):
         self.ui.set_program(number)
@@ -33,10 +50,18 @@ class LeiaUIThread(threading.Thread):
         return self.ui.volume
 
     def button_down(self, number):
-        self.ui.button_event(number, True)
+        self.run_lock_acquire()
+        try:
+            self.ui.button_event(number, True)
+        finally:
+            self.run_lock_release()
 
     def button_up(self, number):
-        self.ui.button_event(number, False)
+        self.run_lock_acquire()
+        try:
+            self.ui.button_event(number, False)
+        finally:
+            self.run_lock_release()
 
 
 def parse_args():

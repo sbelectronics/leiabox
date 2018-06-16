@@ -66,9 +66,8 @@ function leiabox() {
 
         for (var i=0; i<32; i++) {
             (function(i) {
-                var button_number = i;
-                $("#button"+i).mousedown(function() { leiabox.onButtonDown(button_number); });
-                $("#button"+i).mouseup(function() { leiabox.onButtonUp(button_number); });
+                $("#button"+i).mousedown(function() { leiabox.onButtonDown(i); });
+                $("#button"+i).mouseup(function() { leiabox.onButtonUp(i); });
             })(i);
         }
     }
