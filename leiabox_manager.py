@@ -44,7 +44,7 @@ def startup(args):
    
     bus = smbus.SMBus(1)
 
-    leiabox = LeiaUIsThread(bus)
+    leiabox = LeiaUIThread(bus)
     leiabox.start()
 
     glo_leiabox = leiabox

@@ -10,7 +10,7 @@ from smbpi.ioexpand import MCP23017
 
 from musicprogram import MusicProgram
 from gameprogram import GameProgram
-from midistuff import all_notes_off, midi_set_volume
+from midistuff import all_notes_off, set_volume as midi_set_volume
 
 DEBOUNCE_TIME=0.01
 LONG_THRESH=2

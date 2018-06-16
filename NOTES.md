@@ -91,7 +91,7 @@ wget http://www.skunkworx.org/music.stuff/midi/s/santana/EvilWays.mid
 fluidsynth -a alsa -n -i /usr/share/sounds/sf2/FluidR3_GM.sf2 -r=22050 EvilWays.mid
 
 # run as a server
-fluidsynth -a alsa -i /usr/share/sounds/sf2/FluidR3_GM.sf2 -r=22050 EvilWays.mid
+fluidsynth -a alsa -i /usr/share/sounds/sf2/FluidR3_GM.sf2 -r=22050 -s
 aplaymidi -p 128:0 EvilWays.mid
 ```
 

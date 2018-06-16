@@ -1,11 +1,10 @@
 from django.conf.urls import patterns, url
 
-from leiaxos_web_ui import views
+from leiabox_web_ui import views
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    url(r'^insertQuarter$', views.insertQuarter, name='insertQuarter'),
-    url(r'^insertDime$', views.insertDime, name='insertDime'),
-    url(r'^insertNickel$', views.insertNickel, name='insertNickel'),
+    url(r'^setProgram$', views.setProgram, name='setProgram'),
+    url(r'^setVolume$', views.setVolume, name='setVolume'),
     url(r'^getStatus$', views.getStatus, name='getStatus'),
 )
