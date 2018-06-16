@@ -16,14 +16,14 @@ def index(request):
 def setProgram(request):
     value = request.GET.get("value", 0)
 
-    glo_leiabox.set_program(value)
+    glo_leiabox.set_program(int(value))
 
     return HttpResponse("okey dokey")
 
 def setVolume(request):
     value = request.GET.get("value", 0)
 
-    glo_leiabox.set_volume(v=value)
+    glo_leiabox.set_volume(v=int(value))
 
     return HttpResponse("okey dokey")
 

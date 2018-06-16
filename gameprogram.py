@@ -52,7 +52,7 @@ class GameProgram(MusicProgram):
 
         self.last_jump_time = time.time()
 
-        self.hide_delay = 0.5
+        self.hide_delay = 1
 
         self.button_jump_time[self.last_button] = time.time()
 

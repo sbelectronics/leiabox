@@ -15,3 +15,9 @@ def all_notes_off():
 
 def set_volume(amount):
     os.system("amixer sset PCM %d%%" % amount)
+
+def main():
+    connect_midi()
+
+if __name__ == "__main__":
+    main()    

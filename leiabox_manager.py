@@ -26,10 +26,10 @@ class LeiaUIThread(threading.Thread):
     def get_program(self):
         return self.ui.program_number
 
-    def set_volume(self, *args, **kwarfs):
-        self.ui.set_program(*args, **kwargs)
+    def set_volume(self, *args, **kwargs):
+        self.ui.set_volume(*args, **kwargs)
 
-    def get_volume(self, volume):
+    def get_volume(self):
         return self.ui.volume
 
 
