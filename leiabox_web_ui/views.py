@@ -27,6 +27,20 @@ def setVolume(request):
 
     return HttpResponse("okey dokey")
 
+def buttonDown(request):
+    value = request.GET.get("value", 0)
+
+    glo_leiabox.button_down(int(value))
+
+    return HttpResponse("okey dokey")
+
+def buttonUp(request):
+    value = request.GET.get("value", 0)
+
+    glo_leiabox.button_up(int(value))
+
+    return HttpResponse("okey dokey")
+
 def getStatus(request):
     result = {}
 

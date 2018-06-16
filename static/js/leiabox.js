@@ -36,6 +36,16 @@ function leiabox() {
         }
     }
 
+    onButtonDown = function(value) {
+        console.log("sendButtonDown " + value);
+        $.ajax({url: "/leiabox/buttonDown?value=" + value});
+    }
+
+    onButtonUp = function(value) {
+        console.log("sendButtonUp " + value);
+        $.ajax({url: "/leiabox/buttonUp?value=" + value});
+    }
+
     sendProgram = function(value) {
         $.ajax({url: "/leiabox/setProgram?value=" + value});
     }
@@ -53,6 +63,14 @@ function leiabox() {
                                     stop: this.onVolumeStopSlide});
         $("#program0").click(function() { leiabox.onProgram0(); });
         $("#program1").click(function() { leiabox.onProgram1(); });
+
+        for (var i=0; i<32; i++) {
+            (function(i) {
+                var button_number = i;
+                $("#button"+i).mousedown(function() { leiabox.onButtonDown(button_number); });
+                $("#button"+i).mouseup(function() { leiabox.onButtonUp(button_number); });
+            })(i);
+        }
     }
 
     parseSettings = function(settings) {

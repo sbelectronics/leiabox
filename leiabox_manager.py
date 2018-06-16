@@ -32,6 +32,12 @@ class LeiaUIThread(threading.Thread):
     def get_volume(self):
         return self.ui.volume
 
+    def button_down(self, number):
+        self.ui.button_event(number, True)
+
+    def button_up(self, number):
+        self.ui.button_event(number, False)
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
