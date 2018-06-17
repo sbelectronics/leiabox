@@ -36,6 +36,14 @@ function leiabox() {
         }
     }
 
+    onProgram3 = function() {
+        var button_selector = "#program3";
+        console.log("program3");
+        if (leiabox.postUI) {
+            leiabox.sendProgram(3);
+        }
+    }
+
     onButtonDown = function(value) {
         console.log("sendButtonDown " + value);
         $.ajax({url: "/leiabox/buttonDown?value=" + value});
@@ -63,6 +71,7 @@ function leiabox() {
                                     stop: this.onVolumeStopSlide});
         $("#program0").click(function() { leiabox.onProgram0(); });
         $("#program1").click(function() { leiabox.onProgram1(); });
+        $("#program3").click(function() { leiabox.onProgram3(); });
 
         for (var i=0; i<32; i++) {
             (function(i) {

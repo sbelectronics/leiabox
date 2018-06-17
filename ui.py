@@ -11,6 +11,8 @@ from smbpi.ioexpand import MCP23017
 
 from musicprogram import MusicProgram
 from gameprogram import GameProgram
+from animalsprogram import AnimalsProgram
+from playsong import BackgroundPlayer
 from midistuff import all_notes_off as midi_all_notes_off, set_volume as midi_set_volume
 
 DEBOUNCE_TIME=0.01
@@ -74,17 +76,28 @@ class LeiaUI(object):
             for i in range(0, 2):
                 button_controller.set_pullup(i, 0xFF)
 
+        self.background_player = BackgroundPlayer(self)
+        self.background_player.start()
+
         self.program = None
         self.program_number = -1
         self.volume = 0
         self.play_voice("PowerOn.mp3")
         self.set_program(0)
-        self.set_volume(preset=4)
+        self.set_volume(preset=4)\
+
+    def background_play(self, *args, **kwargs):
+        self.background_player.add_file(*args, **kwargs)
+
+    def background_play_complete(self,p):
+        if self.program:
+            self.program.background_play_complete(p)
 
     def play_voice(self, fn):
         os.system("mpg123 voice/%s" % fn)
 
     def set_program(self, number):
+        self.background_player.cancel()
         if (number == 0):
             self.all_notes_off()
             self.play_voice("MusicMode.mp3")
@@ -93,6 +106,10 @@ class LeiaUI(object):
             self.all_notes_off()
             self.play_voice("GameMode.mp3")
             self.program = GameProgram(self)
+        elif (number == 3):
+            self.all_notes_off()
+            #self.play_voice("AnimalMode.mp3")
+            self.program = AnimalsProgram(self)
 
         self.program_number = number
 

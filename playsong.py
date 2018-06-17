@@ -1,6 +1,8 @@
+import os
 import time
 import random
 import subprocess
+import threading
 
 class PlaySong(object):
     songs = ["mpg123 -k 1755 -n 700 mp3/Queen-AnotherOneBitesTheDust.mp3",
@@ -30,7 +32,36 @@ class PlaySong(object):
             self.ui.set_button_bright(i, 0)
 
 
+class BackgroundPlayer(threading.Thread):
+    def __init__(self, ui):
+        super(BackgroundPlayer, self).__init__()
+        self.ui=ui
+        self.plays=[]
+        self.daemon = True
 
+    def add_file(self, dir=None, fn=None, tag=None, data={}):
+        data = data.copy()
 
+        if dir:
+            fn = os.path.join(dir, fn)
+        if fn:
+            data["fn"] = fn
+        if tag:
+            data["tag"] = tag
 
+        song_cmd = "mpg123 %s" % fn
+        data["p"] = subprocess.Popen(song_cmd, shell=True)
+        self.plays.append(data)
 
+    def cancel(self, tag=None):
+        for p in self.plays[:]:
+            if (not tag) or (p.get(tag)==tag):
+                p["p"].terminate()
+
+    def run(self):
+        while True:
+            for p in self.plays[:]:
+                if p["p"].poll() is not None:
+                    self.ui.background_play_complete(p)
+                    self.plays.remove(p)
+            time.sleep(0.01)

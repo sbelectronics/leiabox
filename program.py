@@ -12,3 +12,6 @@ class Program(object):
 
     def idle(self):
         pass
+
+    def background_play_complete(self, p):
+        pass
