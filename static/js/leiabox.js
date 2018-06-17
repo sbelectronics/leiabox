@@ -56,7 +56,7 @@ function leiabox() {
     }
 
     initButtons = function() {
-        $("#slider-volume").slider({min: 1,
+        $("#slider-volume").slider({min: 50,
                                     max: 100,
                                     change: this.onVolumeChange,
                                     start: this.onVolumeStartSlide,

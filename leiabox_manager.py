@@ -38,7 +38,11 @@ class LeiaUIThread(threading.Thread):
             self.ui.all_notes_off()
 
     def set_program(self, number):
-        self.ui.set_program(number)
+        self.run_lock_acquire()
+        try:
+            self.ui.set_program(number)
+        finally:
+            self.run_lock_release()
 
     def get_program(self):
         return self.ui.program_number

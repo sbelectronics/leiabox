@@ -3,6 +3,7 @@
     Scott Baker, http://www.smbaker.com/
 """
 
+import os
 import smbus
 import time
 from smbpi.tlc59116 import TLC59116, STATE_ON, STATE_OFF, STATE_PWM
@@ -76,13 +77,21 @@ class LeiaUI(object):
         self.program = None
         self.program_number = -1
         self.volume = 0
+        self.play_voice("PowerOn.mp3")
         self.set_program(0)
         self.set_volume(preset=4)
 
+    def play_voice(self, fn):
+        os.system("mpg123 voice/%s" % fn)
+
     def set_program(self, number):
         if (number == 0):
+            self.all_notes_off()
+            self.play_voice("MusicMode.mp3")
             self.program = MusicProgram(self)
         elif (number == 1):
+            self.all_notes_off()
+            self.play_voice("GameMode.mp3")
             self.program = GameProgram(self)
 
         self.program_number = number
