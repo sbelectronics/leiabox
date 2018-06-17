@@ -108,7 +108,7 @@ class LeiaUI(object):
             self.program = GameProgram(self)
         elif (number == 3):
             self.all_notes_off()
-            #self.play_voice("AnimalMode.mp3")
+            self.play_voice("AnimalMode.mp3")
             self.program = AnimalsProgram(self)
 
         self.program_number = number
